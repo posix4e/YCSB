@@ -70,23 +70,29 @@ public class C5Client extends com.yahoo.ycsb.DB {
   public static final int NoMatchingRecord = -3;
 
   private static final Object tableLock = new Object();
+  private String hostname;
+  private int port;
 
   /**
    * Initialize any state for this DB.
    * Called once per DB instance; there is one DB instance per client thread.
    */
   public void init() throws DBException {
-    if ((getProperties().getProperty("debug") != null) &&
-        (getProperties().getProperty("debug").compareTo("true") == 0)) {
+    Properties props = getProperties();
+    if ((props.getProperty("debug") != null) &&
+        (props.getProperty("debug").compareTo("true") == 0)) {
       _debug = true;
     }
 
-    _columnFamily = getProperties().getProperty("columnfamily");
+    _columnFamily = props.getProperty("columnfamily", "cf");
     if (_columnFamily == null) {
       System.err.println("Error, must specify a columnfamily for HBase table");
       throw new DBException("No columnfamily specified");
     }
     _columnFamilyBytes = Bytes.toBytes(_columnFamily);
+
+    hostname = props.getProperty("c5.hostname", "localhost");
+    port = Integer.parseInt(props.getProperty("c5.port", "8080"));
 
   }
 
@@ -99,8 +105,6 @@ public class C5Client extends com.yahoo.ycsb.DB {
 
   void getHTable(String table) throws IOException {
     synchronized (tableLock) {
-      int port = 8080;
-      String hostname = "localhost";
       try {
         _hTable = new FakeHTable(hostname, port, ByteString.copyFromUtf8(table));
       } catch (InterruptedException e) {
