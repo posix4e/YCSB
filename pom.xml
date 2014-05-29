@@ -44,6 +44,7 @@
   <!-- Properties Management -->
   <properties>
     <maven.assembly.version>2.2.1</maven.assembly.version>
+    <c5.version>0.1-SNAPSHOT</c5.version>
     <hbase.version>0.92.1</hbase.version>
     <accumulo.version>1.6.0</accumulo.version>
     <cassandra.version>0.7.0</cassandra.version>
@@ -61,6 +62,7 @@
 
   <modules>
     <!--module>build-tools</module-->
+    <module>c5</module>
     <module>cassandra</module>
     <module>core</module>
     <module>hbase</module>
