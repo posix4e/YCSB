@@ -248,7 +248,9 @@ public class C5Client extends com.yahoo.ycsb.DB {
       }
       return ServerError;
     } finally {
-      scanner.close();
+      if (scanner != null) {
+        scanner.close();
+      }
     }
 
     return Ok;
